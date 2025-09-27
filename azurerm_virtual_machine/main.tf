@@ -24,6 +24,27 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
+
+resource "azurerm_network_security_group" "nsg" {
+  name                = var.nsg_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  security_rule {
+    name                       = "test123"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+ 
+}
+
 resource "azurerm_virtual_machine" "main" {
   name                  = var.vm_name
   location              = var.location
@@ -43,6 +64,7 @@ resource "azurerm_virtual_machine" "main" {
     sku       = var.image_sku
     version   = var.image_version
   }
+
   storage_os_disk {
     name              = "myosdisk1"
     caching           = "ReadWrite"
@@ -53,9 +75,19 @@ resource "azurerm_virtual_machine" "main" {
     computer_name  = "hostname"
     admin_username = var.admin_username
     admin_password = var.admin_password
+    custom_data = base64encode(<<-EOF
+                #!/bin/bash
+                sudo apt update -y
+                sudo apt install nginx -y
+                sudo systemctl start nginx
+                sudo systemctl enable nginx
+                EOF
+                )
   }
   os_profile_linux_config {
     disable_password_authentication = false
   }
   }
+
+
 

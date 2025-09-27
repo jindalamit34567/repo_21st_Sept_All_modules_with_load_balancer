@@ -46,3 +46,7 @@ variable "vnet_name" {
 variable "frontend_subnet_name" {
   
 }
+
+variable "nsg_name" {
+  
+}

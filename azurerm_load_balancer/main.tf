@@ -1,5 +1,5 @@
 data "azurerm_public_ip" "ip" {
-  name                = "loadbalancer_ip"
+  name                = "myPublicIP"
   resource_group_name = "ajindal-rg"
 }
 
@@ -15,13 +15,13 @@ resource "azurerm_lb" "lb" {
   }
 }
 
-resource "azurerm_lb_backend_address_pool" "pool" {
+resource "azurerm_lb_backend_address_pool" "pool1" {
   loadbalancer_id = azurerm_lb.lb.id
   name            = "lb-BackEndAddressPool"
 }
 
 
-resource "azurerm_lb_probe" "example" {
+resource "azurerm_lb_probe" "my-probe" {
   loadbalancer_id = azurerm_lb.lb.id
   name            = "my-probe"
   port            = 80
@@ -36,5 +36,10 @@ resource "azurerm_lb_rule" "lb_rule" {
   frontend_port                  = 80
   backend_port                   = 80
   frontend_ip_configuration_name = "myPublicIPAddress"
+  backend_address_pool_ids = [azurerm_lb_backend_address_pool.pool1.id]
+  probe_id                       = azurerm_lb_probe.my-probe.id
+
 }
+
+
 

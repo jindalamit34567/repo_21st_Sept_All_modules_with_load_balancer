@@ -1,17 +1,22 @@
 # This is our sub branch Code 
 # I am adding a comment to this file - 4th July--
 
+data "azurerm_public_ip" "ip" {
+  name                = var.pubilc_ip_name
+  resource_group_name = var.resource_group_name
+}
 resource "azurerm_public_ip" "pip" {
 
 name = var.pubilc_ip_name
 location = var.location
 resource_group_name = var.resource_group_name
 allocation_method = var.allocation_method
+sku = var.sku
 
 }
 
-resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
-}
+# resource "azurerm_resource_group" "example" {
+#   name     = "example-resources"
+#   location = "Central India"
+# }
 

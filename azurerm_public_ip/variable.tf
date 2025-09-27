@@ -17,3 +17,9 @@ variable "allocation_method" {
   type        = string
   default     = "Static"
   }
+
+  variable "sku" {
+    description = "The SKU of the public IP address (Basic or Standard)."
+    type        = string
+   
+  }
