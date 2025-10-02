@@ -40,9 +40,13 @@ resource "azurerm_network_security_group" "nsg" {
     destination_port_range     = "*"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
-  }
+  } 
+}
 
- 
+
+resource "azurerm_network_interface_security_group_association" "nic2nsg_association" {
+  network_interface_id      = azurerm_network_interface.nic.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
 resource "azurerm_virtual_machine" "main" {

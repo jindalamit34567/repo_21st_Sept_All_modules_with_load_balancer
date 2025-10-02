@@ -79,6 +79,7 @@ module "chinki_vm" {
   nic_name             = "my-nic"
   vnet_name            = "my-network"
   frontend_subnet_name = "my-subnet"
+  nsg_name = "chinki-nsg"
 
 
 }
@@ -100,6 +101,7 @@ module "pinki_vm" {
   nic_name             = "my-nic"
   vnet_name            = "my-network"
   frontend_subnet_name = "my-subnet"
+  nsg_name = "pinki-nsg"
 
 }
 
