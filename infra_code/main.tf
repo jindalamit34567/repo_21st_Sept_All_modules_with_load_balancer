@@ -32,6 +32,15 @@ module "azurerm_subnet" {
   address_prefixes         = ["10.0.1.0/24"]
 }
 
+module "azurerm_subnet1" {
+  source                   = "../Modules/azurerm_subnet"
+  depends_on = [ module.azurerm_virtual_network]
+  subnet_name              = "AzureBastionSubnet"
+  resource_group_name = "ajindal-rg3"
+  virtual_network_name = "ajindal-vnet"
+  address_prefixes         = ["10.0.4.0/24"]
+}
+
 
 
 module "chinki_vm" {
@@ -107,6 +116,23 @@ module "nic_lb_association_pinki" {
   ip_configuration_name    = "ajindal-ip"
   lb_backend_pool        = "ajindal-backend-pool"
   lb_name                  = "ajindal-lb"
-  
+
 }
 
+module "azurerm_public_ip1" {
+  source                   = "../Modules/azurerm_public_ip"
+  depends_on               = [ module.azurerm_resource_group ]
+  public_ip_name           = "mypublic-ip-bastion"
+  resource_group_name      = "ajindal-rg3"
+  location                 = "west us"
+  allocation_method        = "Static"
+}
+module "azurerm_bastion_host" {
+  source                   = "../Modules/azurerm_bastion"
+  depends_on               = [ module.azurerm_public_ip1, module.azurerm_resource_group, module.azurerm_subnet1 ]
+  location                 = "west us"
+  resource_group_name      = "ajindal-rg3"
+  subnet_name              = "AzureBastionSubnet"
+  virtual_network_name     = "ajindal-vnet"
+  public_ip_name           = "mypublic-ip-bastion"
+}
